@@ -9,24 +9,21 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.nextgen.jetcoffeecompose.model.Menu
-import com.nextgen.jetcoffeecompose.model.dummyBestSeller
-import com.nextgen.jetcoffeecompose.model.dummyCategory
-import com.nextgen.jetcoffeecompose.model.dummyMenu
-import com.nextgen.jetcoffeecompose.ui.component.CategoryItem
-import com.nextgen.jetcoffeecompose.ui.component.MenuItem
-import com.nextgen.jetcoffeecompose.ui.component.SearchBar
-import com.nextgen.jetcoffeecompose.ui.component.SectionText
+import com.nextgen.jetcoffeecompose.model.*
+import com.nextgen.jetcoffeecompose.ui.component.*
 import com.nextgen.jetcoffeecompose.ui.theme.JetCoffeeComposeTheme
 
 class MainActivity : ComponentActivity() {
@@ -42,16 +39,18 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun JetCoffeeApp() {
-    Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-        Banner()
-        SectionText(title = stringResource(id = R.string.section_category))
-        CategoryRow()
-        SectionText(title = stringResource(id = R.string.section_favorite_menu))
-        MenuRow(listMenu = dummyMenu)
-        SectionText(title = stringResource(id = R.string.section_best_seller_menu))
-        MenuRow(listMenu = dummyBestSeller)
+    Scaffold(
+        bottomBar = { BottomBar()}
+    ) {
+        Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+            Banner()
+            HomeSection(title = stringResource(id = R.string.section_category), content = { CategoryRow()})
+            HomeSection(title = stringResource(id = R.string.section_favorite_menu),content = { MenuRow(
+                dummyMenu) })
+            HomeSection(title = stringResource(id = R.string.section_best_seller_menu), content = { MenuRow(
+                dummyBestSeller) })
+        }
     }
-    
 }
 
 @Composable
@@ -82,8 +81,6 @@ fun CategoryRow(
             CategoryItem(category = category)
         }
     }
-
-
 }
 
 @Composable
@@ -98,8 +95,39 @@ fun MenuRow(
     ){
         items(listMenu, key = {it.name}){menu->
             MenuItem(menu = menu)
-            
         }
+    }
+}
+
+@Composable
+fun BottomBar(
+    modifier: Modifier = Modifier,
+) {
+    BottomNavigation(
+        backgroundColor = MaterialTheme.colors.background,
+        contentColor = MaterialTheme.colors.primary,
+        modifier = modifier
+    ) {
+        val navigationItem = listOf(
+            BottomBarItem(stringResource(id = R.string.menu_home), Icons.Default.Home),
+            BottomBarItem(stringResource(id = R.string.menu_favorite), Icons.Default.Favorite),
+            BottomBarItem(stringResource(id = R.string.menu_profile), Icons.Default.AccountCircle),
+        )
+
+        navigationItem.map {
+            BottomNavigationItem(
+                icon = {
+                       Icon(imageVector = it.icon, contentDescription = it.title)
+                },
+                label = {
+                        Text(text = it.title)
+                },
+                selected = it.title == navigationItem[0].title,
+                unselectedContentColor = Color.LightGray,
+                onClick = {}
+            )
+        }
+        
     }
     
 }
