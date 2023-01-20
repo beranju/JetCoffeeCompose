@@ -7,7 +7,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -21,9 +21,16 @@ import com.nextgen.jetcoffeecompose.ui.theme.JetCoffeeComposeTheme
 fun SearchBar(
     modifier: Modifier = Modifier,
 ) {
+    //remember -> beruabah ketika berubah orientasi
+    //remembersaveable -> save instance ketika dirotasi -> sebaiknya hanya menampung data primitif
+    var query by remember {
+        mutableStateOf("")
+    }
     TextField(
-        value = "",
-        onValueChange = {},
+        value = query,
+        onValueChange = {newQuery ->
+            query= newQuery
+        },
         leadingIcon= {
                      Icon(
                          imageVector = Icons.Default.Search ,
@@ -39,7 +46,8 @@ fun SearchBar(
                       Text(
                           text = stringResource(id = R.string.placeholder_search) )
         },
-        modifier = modifier.padding(16.dp)
+        modifier = modifier
+            .padding(16.dp)
             .fillMaxWidth()
             .heightIn(min = 48.dp)
             .clip(RoundedCornerShape(16.dp))

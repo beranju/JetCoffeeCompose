@@ -15,9 +15,4 @@ val dummyMenu = listOf<Menu>(
     Menu("Mocacinno", "Rp, 10.000", R.drawable.menu1),
 )
 
-val dummyBestSeller = listOf<Menu>(
-    Menu("Teh Susu Telur", "Rp, 12.000", R.drawable.menu2),
-    Menu("Kopi late Apel", "Rp, 15.000", R.drawable.menu1),
-    Menu("Cappucino Late Dove", "Rp, 15.000", R.drawable.menu3),
-    Menu("Moca black coffee", "Rp, 12.000", R.drawable.menu4),
-)
+val dummyBestSeller = dummyMenu.shuffled()
